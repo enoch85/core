@@ -73,14 +73,19 @@ OC.Settings.Apps = OC.Settings.Apps || {
 		}), {
 			data:{},
 			type:'GET',
-			success:function (apps) {
+			success: function (apps) {
 				OC.Settings.Apps.State.apps = _.indexBy(apps.apps, 'id');
 				var source   = $("#app-template").html();
 				var template = Handlebars.compile(source);
 
-				_.each(apps.apps, function(app) {
-					OC.Settings.Apps.renderApp(app, template, null);
-				});
+				if (apps.apps.length) {
+					_.each(apps.apps, function(app) {
+						OC.Settings.Apps.renderApp(app, template, null);
+					});
+				} else {
+					$('#apps-list').addClass('hidden');
+					$('#apps-list-empty').removeClass('hidden');
+				}
 			},
 			complete: function() {
 				$('#apps-list').removeClass('icon-loading');
